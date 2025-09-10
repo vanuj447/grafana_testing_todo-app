@@ -133,6 +133,8 @@ This repo already includes `dashboard.json` with:
 
 Import it in Grafana and start monitoring instantly.
 
+<img width="1520" height="921" alt="Screenshot from 2025-09-10 15-59-51" src="https://github.com/user-attachments/assets/e9aea549-5668-4ca8-a5d6-ee93af419755" />
+
 ---
 
 ## 🤝 Contributing
