@@ -56,7 +56,7 @@ cd grafana_testing_todo-app
 
 ### 2️⃣ Start the stack
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This will start:
