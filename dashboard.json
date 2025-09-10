@@ -1,93 +1,542 @@
 {
-  "id": null,
-  "title": "Todo App - Metrics & Logs",
-  "timezone": "browser",
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
   "panels": [
     {
-      "type": "stat",
-      "title": "Total Requests",
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bexn2dznfkkjka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "expr": "sum(app_requests_total)",
-          "legendFormat": "requests"
+          "legendFormat": "requests",
+          "refId": "A"
         }
       ],
-      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 }
+      "title": "Total Requests",
+      "type": "stat"
     },
     {
-      "type": "timeseries",
-      "title": "Requests per Endpoint",
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bexn2dznfkkjka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 3,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "expr": "sum by (endpoint) (rate(app_requests_total[1m]))",
-          "legendFormat": "{{endpoint}}"
+          "legendFormat": "{{endpoint}}",
+          "refId": "A"
         }
       ],
-      "gridPos": { "x": 6, "y": 0, "w": 12, "h": 6 }
+      "title": "Requests per Endpoint",
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Request Latency (95th Percentile)",
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "loki",
+        "uid": "cexn2fmmiroqof"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 9,
+        "x": 15,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "cexn2fmmiroqof"
+          },
+          "direction": "backward",
+          "editorMode": "builder",
+          "expr": "{app=\"todo-app\"} |= ``",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Todo App Logs",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bexn2dznfkkjka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "expr": "histogram_quantile(0.95, sum(rate(app_request_latency_seconds_bucket[5m])) by (le, endpoint))",
-          "legendFormat": "{{endpoint}}"
+          "legendFormat": "{{endpoint}}",
+          "refId": "A"
         }
       ],
-      "gridPos": { "x": 0, "y": 6, "w": 12, "h": 6 }
+      "title": "Request Latency (95th Percentile)",
+      "type": "timeseries"
     },
     {
-      "type": "bargauge",
-      "title": "Todos Created vs Deleted",
-      "datasource": "Prometheus",
-      "targets": [
-        {
-          "expr": "sum by (action) (increase(app_todos_total[5m]))",
-          "legendFormat": "{{action}}"
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bexn2dznfkkjka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
         }
-      ],
-      "gridPos": { "x": 12, "y": 6, "w": 6, "h": 6 }
-    },
-    {
-      "type": "stat",
-      "title": "Memory Usage",
-      "datasource": "Prometheus",
-      "targets": [
-        {
-          "expr": "process_resident_memory_bytes",
-          "legendFormat": "memory"
-        }
-      ],
-      "gridPos": { "x": 0, "y": 12, "w": 6, "h": 4 }
-    },
-    {
-      "type": "timeseries",
-      "title": "CPU Usage",
-      "datasource": "Prometheus",
+      },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
           "expr": "rate(process_cpu_seconds_total[1m])",
-          "legendFormat": "CPU"
+          "legendFormat": "CPU",
+          "refId": "A"
         }
       ],
-      "gridPos": { "x": 6, "y": 12, "w": 12, "h": 6 }
+      "title": "CPU Usage",
+      "type": "timeseries"
     },
     {
-      "type": "logs",
-      "title": "Todo App Logs",
-      "datasource": "Loki",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bexn2dznfkkjka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 4,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.1.1",
       "targets": [
         {
-          "expr": "{app=\"todo-app\"}"
+          "expr": "sum by (action) (increase(app_todos_total[5m]))",
+          "legendFormat": "{{action}}",
+          "refId": "A"
         }
       ],
-      "gridPos": { "x": 0, "y": 18, "w": 24, "h": 8 }
+      "title": "Todos Created vs Deleted",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bexn2dznfkkjka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "expr": "process_resident_memory_bytes",
+          "legendFormat": "memory",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage",
+      "type": "stat"
     }
   ],
-  "schemaVersion": 37,
-  "version": 1,
-  "refresh": "10s"
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Todo App - Metrics & Logs",
+  "uid": "0b9f23e1-f500-4384-a657-39269f3803df",
+  "version": 3
 }
