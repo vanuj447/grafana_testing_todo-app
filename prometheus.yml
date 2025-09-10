@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 1s
+
+scrape_configs:
+  - job_name: "todo-app"
+    static_configs:
+      - targets: ["todo-app:8000"]
+
+#add node exporter also
