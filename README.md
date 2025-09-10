@@ -50,7 +50,7 @@ grafana_testing_todo-app/
 
 ### 1️⃣ Clone the repo
 ```bash
-git clone https://github.com/your-username/grafana_testing_todo-app.git
+git clone https://github.com/vanuj447/grafana_testing_todo-app.git
 cd grafana_testing_todo-app
 ```
 
