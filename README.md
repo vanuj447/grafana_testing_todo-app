@@ -1,4 +1,4 @@
-# grafana_testing_todo-app
+# Grafana Testing Todo-App
 
 A complete observability demo project built on a **Node.js Todo Application** with **Prometheus, Grafana, and Loki** integration.  
 This project demonstrates **metrics collection, logging, and dashboard visualization** for real-world monitoring use cases.
