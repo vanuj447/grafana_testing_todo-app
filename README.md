@@ -1,63 +1,48 @@
-# 📊 grafana_testing_todo-app
+# grafana_testing_todo-app
 
-A full-stack demo project that showcases **Observability with Metrics, Logs, and Dashboards** using a simple **Node.js Todo Application**.
-
-This project integrates:
-
-- ✅ **Node.js + Express** – Todo web app with EJS UI  
-- ✅ **Prometheus** – Metrics collection & scraping  
-- ✅ **Grafana** – Dashboard visualization  
-- ✅ **Loki + Promtail** – Centralized log aggregation  
-- ✅ **Traffic Generator** – Bash script to simulate user activity  
+A complete observability demo project built on a **Node.js Todo Application** with **Prometheus, Grafana, and Loki** integration.  
+This project demonstrates **metrics collection, logging, and dashboard visualization** for real-world monitoring use cases.
 
 ---
 
 ## 🚀 Features
 
-- Simple Todo app with **Add / Delete** functionality and clean UI  
-- **Prometheus instrumentation**:  
-  - Request count (per method & endpoint)  
-  - Request latency histogram  
-  - Todo created/deleted counters  
-- Exposes `/metrics` endpoint for Prometheus  
-- Centralized logging with **Promtail → Loki → Grafana**  
-- Pre-built Grafana dashboards for:
-  - Request rate (QPS)  
-  - Error rate tracking  
-  - Request latency (p50, p95, p99)  
-  - Todo trends (created vs deleted)  
-  - Live logs from the app  
-- **Traffic generator** script to simulate app usage  
+- **Todo App**: Node.js + Express + EJS-based web UI
+- **Metrics**: Exposes Prometheus metrics at `/metrics`
+  - Request count, latency histograms, todos created/deleted
+- **Logging**: Uses **Winston** for structured logging, collected in Grafana Loki
+- **Dashboards**:
+  - Includes a pre-built `dashboard.json` Grafana dashboard for easy import
+- **Docker Compose**: Single command to spin up the full stack
+- **Traffic Generator**: Simple bash script to simulate load on the app
 
 ---
 
 ## 🛠️ Tech Stack
 
-- [Node.js](https://nodejs.org/) – Backend server  
-- [Express](https://expressjs.com/) – Web framework  
-- [EJS](https://ejs.co/) – UI templating  
-- [Prometheus](https://prometheus.io/) – Metrics  
-- [Grafana](https://grafana.com/) – Dashboards  
-- [Loki](https://grafana.com/oss/loki/) – Log aggregation  
-- [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/) – Log collection agent  
-- [Docker & Docker Compose](https://docs.docker.com/compose/) – Container orchestration  
+- **Backend**: Node.js, Express, EJS
+- **Metrics**: Prometheus + prom-client
+- **Logging**: Winston → Loki
+- **Visualization**: Grafana
+- **Containerization**: Docker & Docker Compose
 
 ---
 
-## 📂 Project Structure
+## 📂 Repository Structure
 
+```
 grafana_testing_todo-app/
-├── app.js # Node.js Express app
-├── package.json # App dependencies
-├── views/ # EJS templates (UI)
-│ ├── layout.ejs
-│ ├── index.ejs
-│ └── about.ejs
-├── prometheus.yml # Prometheus scrape config
-├── docker-compose.yml # Orchestrates all services
-├── traffic.sh # Bash script to generate traffic
-└── README.md # Project documentation
-
+├── app.js                # Node.js Todo app
+├── views/                # EJS templates (UI)
+├── logs/                 # Winston log output
+├── prometheus.yml        # Prometheus config
+├── dashboard.json        # Pre-built Grafana dashboard
+├── docker-compose.yml    # Orchestration file
+├── package.json          # Node.js dependencies
+├── README.md             # Project documentation
+└── scripts/
+    └── generate_traffic.sh   # Script to generate load
+```
 
 ---
 
@@ -67,86 +52,95 @@ grafana_testing_todo-app/
 ```bash
 git clone https://github.com/your-username/grafana_testing_todo-app.git
 cd grafana_testing_todo-app
+```
 
-2️⃣ Start the stack
-
-docker compose up --build
+### 2️⃣ Start the stack
+```bash
+docker-compose up --build
+```
 
 This will start:
+- **Todo App** → `http://localhost:8000`
+- **Prometheus** → `http://localhost:9090`
+- **Grafana** → `http://localhost:3000`
+- **Loki** → `http://localhost:3100`
 
-    Todo app → http://localhost:8000
+### 3️⃣ Access Grafana
+- Open `http://localhost:3000`
+- Default credentials: `admin / admin`
+- Go to **Dashboards → Manage → Import**
+- Upload or paste JSON from `dashboard.json`
+- Start exploring!
 
-Prometheus → http://localhost:9090
+---
 
-Grafana → http://localhost:3000
+## 📊 Metrics to Query in Prometheus
 
-(default user/pass: admin / admin)
+Some example PromQL queries:
 
-Loki → http://localhost:3100
-3️⃣ Generate traffic
+- **Total Requests**  
+  ```promql
+  sum(app_requests_total)
+  ```
+- **Requests by Method**  
+  ```promql
+  sum by (method) (app_requests_total)
+  ```
+- **Request Latency (95th percentile)**  
+  ```promql
+  histogram_quantile(0.95, sum(rate(app_request_latency_seconds_bucket[5m])) by (le))
+  ```
+- **Todos Created/Deleted**  
+  ```promql
+  sum by (action) (app_todos_total)
+  ```
 
-chmod +x traffic.sh
-./traffic.sh
+---
 
-This will continuously hit the app, add/delete todos, and fetch metrics.
-📈 Prometheus Metrics
+## 📜 Logs
 
-The app exposes metrics at:
-👉 http://localhost:8000/metrics
+The app uses **Winston** for logging. Logs are forwarded to **Grafana Loki**.  
 
-Available metrics:
+- Query logs inside Grafana:
+  - Go to **Explore → Loki**
+  - Run queries like:
+    ```logql
+    {job="todo-app"} |~ "ERROR"
+    ```
 
-    app_requests_total – Total requests per method/endpoint
+---
 
-    app_request_latency_seconds – Request latency histogram
+## 🔄 Generate Load
 
-    app_todos_total – Total todos created/deleted
+Use the provided script to generate traffic:
 
-Example queries:
+```bash
+chmod +x scripts/generate_traffic.sh
+./scripts/generate_traffic.sh
+```
 
-rate(app_requests_total[1m])
-histogram_quantile(0.95, rate(app_request_latency_seconds_bucket[5m]))
-sum by(action)(rate(app_todos_total[1m]))
+This will send continuous requests to the app and create activity in both **metrics** and **logs**.
 
-📊 Grafana Dashboards
+---
 
-    Import Prometheus as a Data Source
+## 📈 Example Dashboard
 
-    Import Loki as a Data Source
+This repo already includes `dashboard.json` with:
+- Request rate graph
+- Latency heatmap
+- Todo activity counter
+- Logs panel (via Loki)
 
-    Build dashboards to visualize:
+Import it in Grafana and start monitoring instantly.
 
-        Request traffic (QPS)
+---
 
-        Latency heatmaps
+## 🤝 Contributing
 
-        Todo creation/deletion stats
+Feel free to open issues or PRs if you’d like to extend the project.
 
-        Application logs (via Loki)
+---
 
-📝 Logs with Loki
+## 📄 License
 
-The Node.js app prints structured logs like:
-
-2025-09-09T12:00:00Z [INFO] GET / - 200
-2025-09-09T12:00:01Z [INFO] POST /add - task=Task_123
-2025-09-09T12:00:02Z [INFO] GET /delete/Task_123 - 200
-
-Promtail ships these logs to Loki, and they can be queried in Grafana’s Explore section.
-🤝 Contributing
-
-Pull requests are welcome! If you’d like to improve UI, add new metrics, or extend dashboards, feel free to fork and submit PRs.
-📜 License
-
-MIT License – free to use, modify, and distribute.
-🎯 Purpose
-
-This project is designed as a hands-on lab for learning:
-
-    How to instrument Node.js apps with Prometheus
-
-    How to visualize metrics in Grafana
-
-    How to collect & query logs with Loki
-
-    How to simulate traffic for testing observability setups
+MIT License © 2025
